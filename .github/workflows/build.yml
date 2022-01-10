@@ -44,5 +44,5 @@ jobs:
         run: |
           .\.sonar\scanner\dotnet-sonarscanner begin /k:"stijnveeke_SoftwareFullComponents.ProductComponent" /o:"stijnveeke" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io"
           dotnet build SoftwareFullComponents.ProductComponent/ProductComponent.csproj
-          dotnet test SoftwareFullComponents.ProductComponent/ProductComponent.csproj --no-build --verbosity normal --collect "Code coverage"
+          dotnet test ProductComponentTests1/ProductComponentTests1.csproj /p:CollectCoverage=true /p:CoverletOutputFormat=opencover          
           .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
