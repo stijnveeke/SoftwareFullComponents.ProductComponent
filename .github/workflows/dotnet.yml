@@ -1,4 +1,4 @@
-name: .NET
+name: Review ProductComponent
 
 on:
   push:
@@ -17,9 +17,25 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 5.0.x
-    - name: Restore dependencies
-      run: dotnet restore
-    - name: Build
-      run: dotnet build --no-restore
-    - name: Test
-      run: dotnet test --no-build --verbosity normal
+    - name: Restore ProductComponent dependencies
+      run: dotnet restore SoftwareFullComponents.ProductComponent/SoftwareFullComponents.ProductComponent.csproj 
+    - name: Build ProductComponent
+      run: dotnet build SoftwareFullComponents.ProductComponent/SoftwareFullComponents.ProductComponent.csproj  --no-restore
+    - name: Test ProductComponent
+      run: dotnet test SoftwareFullComponents.ProductComponent/SoftwareFullComponents.ProductComponent.csproj --no-build --verbosity normal
+        
+    - name: Docker Build & Push Action
+      # You may pin to the exact commit or the version.
+      # uses: mr-smithers-excellent/docker-build-push@a7fe6652db5c7274374844e81692992f5a2befb9
+      uses: mr-smithers-excellent/docker-build-push@v5.6
+      with:
+        # Name of the Docker image
+        image: 3739323298328/product-component
+        # Target Docker registry
+        registry: docker.io
+        # Location of Dockerfile, if not Dockerfile in root directory
+        dockerfile: SoftwareFullComponents.ProductComponent/Dockerfile
+        # Docker registry username
+        username: ${{ secrets.DOCKER_USERNAME }}
+        # Docker registry password
+        password: ${{ secrets.DOCKER_PASSWORD }}
