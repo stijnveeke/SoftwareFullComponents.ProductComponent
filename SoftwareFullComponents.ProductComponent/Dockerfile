@@ -7,16 +7,16 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
 WORKDIR /src
-COPY ["SoftwareFullComponents.ProductComponent/SoftwareFullComponents.ProductComponent.csproj", "SoftwareFullComponents.ProductComponent/"]
-RUN dotnet restore "SoftwareFullComponents.ProductComponent/SoftwareFullComponents.ProductComponent.csproj"
+COPY ["SoftwareFullComponents.ProductComponent/ProductComponent.csproj", "SoftwareFullComponents.ProductComponent/"]
+RUN dotnet restore "SoftwareFullComponents.ProductComponent/ProductComponent.csproj"
 COPY . .
 WORKDIR "/src/SoftwareFullComponents.ProductComponent"
-RUN dotnet build "SoftwareFullComponents.ProductComponent.csproj" -c Release -o /app/build
+RUN dotnet build "ProductComponent.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "SoftwareFullComponents.ProductComponent.csproj" -c Release -o /app/publish
+RUN dotnet publish "ProductComponent.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "SoftwareFullComponents.ProductComponent.dll"]
+ENTRYPOINT ["dotnet", "ProductComponent.dll"]
