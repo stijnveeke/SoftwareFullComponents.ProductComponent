@@ -18,11 +18,11 @@ jobs:
       with:
         dotnet-version: 5.0.x
     - name: Restore ProductComponent dependencies
-      run: dotnet restore SoftwareFullComponents.ProductComponent/SoftwareFullComponents.ProductComponent.csproj 
+      run: dotnet restore SoftwareFullComponents.ProductComponent/ProductComponent.csproj 
     - name: Build ProductComponent
-      run: dotnet build SoftwareFullComponents.ProductComponent/SoftwareFullComponents.ProductComponent.csproj  --no-restore
+      run: dotnet build SoftwareFullComponents.ProductComponent/ProductComponent.csproj  --no-restore
     - name: Test ProductComponent
-      run: dotnet test SoftwareFullComponents.ProductComponent/SoftwareFullComponents.ProductComponent.csproj --no-build --verbosity normal
+      run: dotnet test SoftwareFullComponents.ProductComponent/ProductComponent.csproj --no-build --verbosity normal
         
     - name: Docker Build & Push Action
       # You may pin to the exact commit or the version.
