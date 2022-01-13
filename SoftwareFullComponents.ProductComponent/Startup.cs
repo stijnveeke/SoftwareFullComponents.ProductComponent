@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -21,21 +22,36 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using IdentityModel;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Data.SqlClient;
 
 namespace ProductComponent
 {
+    [ExcludeFromCodeCoverage]
     public class Startup
     {
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            
+            this.DBPORT = Environment.GetEnvironmentVariable("Port");
+            this.DBHOST = Environment.GetEnvironmentVariable("Host");
+            this.DBUser = Environment.GetEnvironmentVariable("User");
+            this.DBPassword = Environment.GetEnvironmentVariable("Password");
+            this.DBDatabase = Environment.GetEnvironmentVariable("Database");
         }
 
         public IConfiguration Configuration { get; }
+        private string DBPORT = null;
+        private string DBHOST = null;
+        private string DBUser = null;
+        private string DBPassword = null;
+        private string DBDatabase = null;
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
+
             services.Configure<IdentityOptions>(options =>
             {
                 options.ClaimsIdentity.RoleClaimType = JwtClaimTypes.Role;
@@ -103,31 +119,66 @@ namespace ProductComponent
                 c.SwaggerDoc("v1", new OpenApiInfo {Title = "ProductComponent", Version = "v1"});
             });
 
-            services.AddDbContext<ProductComponentContext>(options =>
-                    options.UseSqlServer(Environment.GetEnvironmentVariable("ConnectionString") ?? Configuration.GetConnectionString("ProductComponentContext")));
-        }
+            bool hasEnvs =
+                !(this.DBUser == null ||
+                this.DBPassword == null ||
+                this.DBDatabase == null ||
+                this.DBPORT == null ||
+                this.DBHOST == null);
 
+            string connectionString = hasEnvs ? $"Data Source={this.DBHOST},{this.DBPORT};Initial Catalog={this.DBDatabase};User ID={this.DBUser};Password={this.DBPassword}" : Configuration.GetConnectionString("DefaultConnection");
+
+            services.AddDbContext<ProductComponentContext>(options =>
+                    options.UseSqlServer(connectionString));
+        }
+        
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.Use((context, next) => { context.Request.Scheme = "https"; return next(); });
             if (env.IsDevelopment() || env.IsEnvironment("Local"))
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
 
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "ProductComponent v1"));
-
-                using (var serviceScope = app.ApplicationServices.CreateScope())
-                {
-                    ProductComponentContext context = serviceScope.ServiceProvider.GetService<ProductComponentContext>();
-                    context.Database.Migrate();
-                }
+                
             }else
             {
                 // Disabled for development because auto ssl redirect from gateway!
                 app.UseHttpsRedirection();
             }
 
+            using (var serviceScope = app.ApplicationServices.CreateScope())
+            {
+                ProductComponentContext context = serviceScope.ServiceProvider.GetService<ProductComponentContext>();
+                if ( context.Database.CanConnect() )
+                {
+                    context.Database.Migrate();
+                }
+                else
+                {
+                    string initConnectionString = $"Data Source = {this.DBHOST},{this.DBPORT};User ID = {this.DBUser}; Password={this.DBPassword}";
+                    SqlConnection connection = new SqlConnection(initConnectionString);
+                    
+                    try
+                    {
+                        connection.Open();
+                        SqlCommand sqlcommand = new SqlCommand($"CREATE DATABASE {this.DBDatabase}", connection);
+                        sqlcommand.ExecuteNonQuery();
+                        sqlcommand.Dispose();
+                        connection.Close();
+                        if (context.Database.CanConnect())
+                        {
+                            context.Database.Migrate();
+                        }else { throw new Exception("Failed to connect to database");  }
+                    }catch (Exception ex)
+                    {
+                        throw ex;
+                    }
+                }
+                    
+            }
       
 
             app.UseRouting();

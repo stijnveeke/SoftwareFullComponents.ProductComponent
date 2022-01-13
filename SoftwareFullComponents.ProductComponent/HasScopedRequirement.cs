@@ -1,13 +1,14 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace ProductComponent
 {
     // HasScopeRequirement.cs
-
+    [ExcludeFromCodeCoverage]
     public class HasScopeRequirement : IAuthorizationRequirement
     {
         public string Issuer { get; }

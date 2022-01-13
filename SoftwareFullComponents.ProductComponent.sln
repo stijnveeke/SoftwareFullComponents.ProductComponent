@@ -7,10 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductComponent", "Softwar
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{88A2858F-C292-4F8C-969D-C0D8210E11DB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductComponentTests", "..\ProductComponentTests\ProductComponentTests.csproj", "{4A42ACD9-9CC5-4771-B449-C9559B797A30}"
-	ProjectSection(ProjectDependencies) = postProject
-		{69688790-FBA4-43F5-88C1-883CECA4E8A9} = {69688790-FBA4-43F5-88C1-883CECA4E8A9}
-	EndProjectSection
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductComponentTests1", "ProductComponentTests1\ProductComponentTests1.csproj", "{36478841-A45C-4481-BEF4-5A8DEB0EF458}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -26,10 +23,10 @@ Global
 		{88A2858F-C292-4F8C-969D-C0D8210E11DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{88A2858F-C292-4F8C-969D-C0D8210E11DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{88A2858F-C292-4F8C-969D-C0D8210E11DB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4A42ACD9-9CC5-4771-B449-C9559B797A30}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4A42ACD9-9CC5-4771-B449-C9559B797A30}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4A42ACD9-9CC5-4771-B449-C9559B797A30}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4A42ACD9-9CC5-4771-B449-C9559B797A30}.Release|Any CPU.Build.0 = Release|Any CPU
+		{36478841-A45C-4481-BEF4-5A8DEB0EF458}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{36478841-A45C-4481-BEF4-5A8DEB0EF458}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{36478841-A45C-4481-BEF4-5A8DEB0EF458}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{36478841-A45C-4481-BEF4-5A8DEB0EF458}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

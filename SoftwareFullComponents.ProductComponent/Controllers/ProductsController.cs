@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -13,6 +14,7 @@ using AutoMapper;
 
 namespace ProductComponent.Controllers
 {
+    [ExcludeFromCodeCoverage]
     [Authorize]
     [Route("api/[controller]")]
     [ApiController]
@@ -89,7 +91,7 @@ namespace ProductComponent.Controllers
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         [Authorize("create:product")]
-        public async Task<ActionResult<Product>> PostProduct(ProductCreate productCreate)
+        public async Task<ActionResult<Product>> PostProduct([FromBody] ProductCreate productCreate)
         {
             var product = await _productRepository.CreateProduct(_mapper.Map<Product>(productCreate));
             return CreatedAtAction("GetProduct", new { id = product.Id }, product);

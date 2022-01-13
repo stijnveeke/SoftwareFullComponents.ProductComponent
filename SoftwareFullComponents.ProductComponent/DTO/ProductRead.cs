@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace ProductComponent.DTO
 {
+    [ExcludeFromCodeCoverage]
     public class ProductRead
     {
         public int Id { get; set; }

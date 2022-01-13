@@ -80,6 +80,7 @@ namespace ProductComponent.Data
             return await _context.Product.ToListAsync();
         }
 
+
         public bool ProductExists(string productSlug)
         {
             return _context.Product.Any(e => e.ProductSlug == productSlug);

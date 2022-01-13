@@ -2,12 +2,17 @@ version: '3.4'
 
 services:
   softwarefullcomponents.productcomponent:
+    container_name: productComponent
     image: ${DOCKER_REGISTRY-}softwarefullcomponentsproductcomponent
     build:
       context: .
       dockerfile: SoftwareFullComponents.ProductComponent/Dockerfile
     environment:
-        ConnectionString: "Data Source=host.docker.internal,1433;Initial Catalog=ProductComponent-6705ec26-21d6-4425-9120-1df6d6cb958a;User ID=sa;Password=Root1234"
+       Database: "ProductComponent"
+       User: "SA"
+       Password: "#Root1234!"
+       Host: "host.docker.internal"
+       Port: "1433"
     ports:
       - "8081:80"
       - "4434:443"
@@ -21,10 +26,12 @@ services:
     ports:
       - "1433:1433"
     environment:
-      SA_PASSWORD: "Root1234"
+      SA_PASSWORD: "#Root1234!"
       ACCEPT_EULA: "Y"
     volumes:
       - productdata:/var/opt/mssql/data 
 
 volumes:
   productdata:
+  pgadmin:
+  postgres:
