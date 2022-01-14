@@ -64,6 +64,14 @@ namespace ProductComponent.Data.Tests
         }
 
         [TestMethod()]
+        public async Task GetNoProductBySlugAsync()
+        {
+            Product product = await this._repository.GetProductBySlug("super-bad-software");
+
+            Assert.IsTrue(product == null);
+        }
+
+        [TestMethod()]
         public async Task CreateProductAsync()
         {
             Product newProduct = new Product

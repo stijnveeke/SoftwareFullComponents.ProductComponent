@@ -126,16 +126,16 @@ namespace ProductComponent
                 this.DBPORT == null ||
                 this.DBHOST == null);
 
-            string connectionString = hasEnvs ? $"Data Source={this.DBHOST},{this.DBPORT};Initial Catalog={this.DBDatabase};User ID={this.DBUser};Password={this.DBPassword}" : Configuration.GetConnectionString("DefaultConnection");
+            //string connectionString = hasEnvs ? $"Data Source={this.DBHOST},{this.DBPORT};Initial Catalog={this.DBDatabase};User ID={this.DBUser};Password={this.DBPassword}" : Configuration.GetConnectionString("DefaultConnection");
+
 
             services.AddDbContext<ProductComponentContext>(options =>
-                    options.UseSqlServer(connectionString));
+                    options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
         }
         
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.Use((context, next) => { context.Request.Scheme = "https"; return next(); });
             if (env.IsDevelopment() || env.IsEnvironment("Local"))
             {
                 app.UseDeveloperExceptionPage();

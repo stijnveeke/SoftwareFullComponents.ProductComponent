@@ -94,7 +94,7 @@ namespace ProductComponent.Controllers
         public async Task<ActionResult<Product>> PostProduct([FromBody] ProductCreate productCreate)
         {
             var product = await _productRepository.CreateProduct(_mapper.Map<Product>(productCreate));
-            return CreatedAtAction("GetProduct", new { id = product.Id }, product);
+            return CreatedAtAction("GetProduct", new { productSlug = product.ProductSlug }, product);
         }
 
         // DELETE: api/Products/5
